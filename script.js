@@ -27,15 +27,17 @@ const updateSelectedCount = () => {
 //movie select event
 movieSelect.addEventListener("change", (e) => {
   ticketPrice = +e.target.value;
+
   updateSelectedCount();
 });
 
 //seat click event
 container.addEventListener("click", function (e) {
-  Array.from(seats, (seat) => {
-    if (e.target === seat) {
-      e.target.classList.toggle("selected");
-    }
+  if (
+    e.target.classList.contains("seat") &&
+    !e.target.classList.contains("occupied")
+  ) {
+    e.target.classList.toggle("selected");
     updateSelectedCount();
-  });
+  }
 });
