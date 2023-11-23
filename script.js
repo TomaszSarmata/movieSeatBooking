@@ -3,6 +3,10 @@ const seats = document.querySelectorAll(".row .seat:not(.occupied)");
 const count = document.getElementById("count");
 const total = document.getElementById("total");
 const movieSelect = document.getElementById("movie");
+
+//populate UI with out data from the local storage
+populateUI();
+
 let ticketPrice = +movieSelect.value;
 
 //save selected movie index and price
@@ -31,6 +35,28 @@ const updateSelectedCount = () => {
   total.innerHTML = totalPrice;
 };
 
+//here we are going to get data from the local storage and populate our UI
+
+function populateUI() {
+  const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats")); //that will set the selected seats into an array
+  //now we will have to see if there are any seats
+  if (selectedSeats !== null && selectedSeats.length > 0) {
+    seats.forEach((seat, index) => {
+      if (selectedSeats.indexOf(index) > -1) {
+        //if its greater than -1 it's there
+        seat.classList.add("selected");
+      }
+    });
+  }
+  const selectedMovieIndex = localStorage.getItem("selectedMovieIndex");
+
+  if (selectedMovieIndex !== null) {
+    movieSelect.selectedIndex = selectedMovieIndex;
+  }
+
+  const moviePrice = localStorage.getItem("moviePrice");
+}
+
 //movie select event
 movieSelect.addEventListener("change", (e) => {
   ticketPrice = +e.target.value;
@@ -48,3 +74,7 @@ container.addEventListener("click", function (e) {
     updateSelectedCount();
   }
 });
+
+//here we are going to make sure that our ui is populated with the right initial count and total by simply calling update selected count on the page load
+
+updateSelectedCount();
